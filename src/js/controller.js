@@ -25,7 +25,6 @@ const getRecipe = async function () {
       sourceUrl: recipe.source_url,
       imageUrl: recipe.image_url,
     }
-
   } catch (err) {
     alert(err);
   }
