@@ -82,7 +82,7 @@ class recipeView {
         <div class="recipe__ingredients">
             <h2 class="heading--2">Recipe ingredients</h2>
             <ul class="recipe__ingredient-list">
-                ${this.#data.ingredients.map(this.#generateMarkupIngridient).join('')}
+                ${this.#data.ingredients.map(this.#generateMarkupIngredient).join('')}
             </ul>
         </div>
 
@@ -107,7 +107,7 @@ class recipeView {
         `;
     }
 
-    #generateMarkupIngridient(ingredient) {
+    #generateMarkupIngredient(ingredient) {
         return `
             <li class="recipe__ingredient">
                 <svg class="recipe__icon">
@@ -119,6 +119,13 @@ class recipeView {
                     ${ingredient.description}
                 </div>
             </li>`
+    }
+
+    addHandleRender(handler) {
+        const windowEvents = [
+            'hashchange',
+            'load'];
+        windowEvents.forEach(event => window.addEventListener(event, handler));
     }
 }
 
