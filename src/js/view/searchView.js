@@ -6,7 +6,7 @@ class SearchView {
         return query;
     }
 
-    addSearchHandler(handler) {
+    addHandlerSearch(handler) {
         this._parentElement.addEventListener('submit', (e) => {
             e.preventDefault();
             handler(this.getQuery());
