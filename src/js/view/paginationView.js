@@ -9,9 +9,6 @@ class PaginationView extends View {
         const currentPage = this._data.page;
         const totalPagesNumber = Math.ceil(this._data.results.length / this._data.resultsPerPage);
 
-        console.log(currentPage)
-        console.log(totalPagesNumber)
-
         if (currentPage === 1 && totalPagesNumber > 1)
             return this.#generateMarkupNextButton(currentPage);
 
