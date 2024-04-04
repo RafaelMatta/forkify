@@ -13,6 +13,33 @@ export default class View {
         this._parentElement.insertAdjacentHTML('afterbegin', markup);
     }
 
+    update(data) {
+        if (!data || Array.isArray(data) && data.length === 0)
+            return this.renderError();
+
+        this._data = data;
+        const newMarkup = this._generateMarkup();
+
+        const newMarkupDOM = document.createRange().createContextualFragment(newMarkup);
+        const newElements = Array.from(newMarkupDOM);
+        const currentElements = Array.from(this._parentElement.querySelectorAll('*'));
+
+        newElements.forEach((newElement, i) => {
+            const currentElement = currentElements[i];
+
+            if (!currentElement.firstChild?.nodeValue.trim()
+                && currentElement.isEqualNode(newElement)) {
+                currentElement.textContent = newElement.textContent;
+            }
+
+            if (currentElement.isEqualNode(newElement)) {
+                Array.from(newElement).forEach(attribute => {
+                    currentElement.setAttribute(attribute.name, attribute.value)
+                })
+            }
+        })
+    }
+
     renderSpinner() {
         const markup = `
           <div class="spinner">
