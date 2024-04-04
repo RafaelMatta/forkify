@@ -18,7 +18,7 @@ class PaginationView extends View {
         if (currentPage < totalPagesNumber)
             return `${this.#generateMarkupNextButton(currentPage)}${this.#generateMarkupPreviousButton(currentPage)}`
 
-        return;
+        return '';
     }
 
     #generateMarkupNextButton(currentPage) {

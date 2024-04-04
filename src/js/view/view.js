@@ -14,26 +14,23 @@ export default class View {
     }
 
     update(data) {
-        if (!data || Array.isArray(data) && data.length === 0)
-            return this.renderError();
-
         this._data = data;
         const newMarkup = this._generateMarkup();
 
         const newMarkupDOM = document.createRange().createContextualFragment(newMarkup);
-        const newElements = Array.from(newMarkupDOM);
+        const newElements = Array.from(newMarkupDOM.querySelectorAll('*'));
         const currentElements = Array.from(this._parentElement.querySelectorAll('*'));
 
         newElements.forEach((newElement, i) => {
             const currentElement = currentElements[i];
 
-            if (!currentElement.firstChild?.nodeValue.trim()
-                && currentElement.isEqualNode(newElement)) {
+            if (!newElement.isEqualNode(currentElement)
+                && newElement.firstChild?.nodeValue.trim() !== '') {
                 currentElement.textContent = newElement.textContent;
             }
 
-            if (currentElement.isEqualNode(newElement)) {
-                Array.from(newElement).forEach(attribute => {
+            if (!newElement.isEqualNode(currentElement)) {
+                Array.from(newElement.attributes).forEach(attribute => {
                     currentElement.setAttribute(attribute.name, attribute.value)
                 })
             }
@@ -66,7 +63,7 @@ export default class View {
             </svg>
             </div>
             <p>${message}</p>
-        </div> -->`
+        </div>`
 
         this._clear();
         this._parentElement.insertAdjacentHTML('afterbegin', markup);
