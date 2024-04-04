@@ -13,6 +13,30 @@ export default class View {
         this._parentElement.insertAdjacentHTML('afterbegin', markup);
     }
 
+    update(data) {
+        this._data = data;
+        const newMarkup = this._generateMarkup();
+
+        const newMarkupDOM = document.createRange().createContextualFragment(newMarkup);
+        const newElements = Array.from(newMarkupDOM.querySelectorAll('*'));
+        const currentElements = Array.from(this._parentElement.querySelectorAll('*'));
+
+        newElements.forEach((newElement, i) => {
+            const currentElement = currentElements[i];
+
+            if (!newElement.isEqualNode(currentElement)
+                && newElement.firstChild?.nodeValue.trim() !== '') {
+                currentElement.textContent = newElement.textContent;
+            }
+
+            if (!newElement.isEqualNode(currentElement)) {
+                Array.from(newElement.attributes).forEach(attribute => {
+                    currentElement.setAttribute(attribute.name, attribute.value)
+                })
+            }
+        })
+    }
+
     renderSpinner() {
         const markup = `
           <div class="spinner">
@@ -39,7 +63,7 @@ export default class View {
             </svg>
             </div>
             <p>${message}</p>
-        </div> -->`
+        </div>`
 
         this._clear();
         this._parentElement.insertAdjacentHTML('afterbegin', markup);

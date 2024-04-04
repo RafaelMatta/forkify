@@ -11,7 +11,7 @@ class RecipeView extends View {
     _generateMarkup() {
         return `
         <figure class="recipe__fig">
-            <img src="${this._data.image}" alt="Tomato" class="recipe__img" />
+            <img src="${this._data.image}" alt="${this._data.title}" class="recipe__img" />
             <h1 class="recipe__title">
                 <span>${this._data.title}</span>
             </h1>
@@ -33,12 +33,12 @@ class RecipeView extends View {
                 <span class="recipe__info-text">servings</span>
 
                 <div class="recipe__info-buttons">
-                <button class="btn--tiny btn--increase-servings">
+                <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings - 1}">
                     <svg>
                     <use href="${icons}#icon-minus-circle"></use>
                     </svg>
                 </button>
-                <button class="btn--tiny btn--increase-servings">
+                <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings + 1}">
                     <svg>
                     <use href="${icons}#icon-plus-circle"></use>
                     </svg>
@@ -92,7 +92,7 @@ class RecipeView extends View {
                 <svg class="recipe__icon">
                     <use href="${icons}#icon-check"></use>
                 </svg>
-                <div class="recipe__quantity">${ingredient.quantity ? new Fraction(ingredient.quantity).toString() : ''}</div>
+                <div class="recipe__quantity">${ingredient.quantity ? new Fraction(+ingredient.quantity.toFixed(2)).toString() : ''}</div>
                 <div class="recipe__description">
                     <span class="recipe__unit">${ingredient.unit}</span>
                     ${ingredient.description}
@@ -105,6 +105,16 @@ class RecipeView extends View {
             'hashchange',
             'load'];
         windowEvents.forEach(event => window.addEventListener(event, handler));
+    }
+
+    addHandleUpdateServings(handler) {
+        this._parentElement.addEventListener('click', (e) => {
+            const button = e.target.closest('.btn--update-servings');
+            if (!button) return;
+            const newServings = button.dataset.updateTo;
+
+            if (+newServings > 0) handler(+newServings);
+        })
     }
 }
 
